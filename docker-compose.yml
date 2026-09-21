@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8069:8069"
+      - "8071:8071"
+    environment:
+      - PGHOST=db
+      - PGPORT=5432
+      - PGUSER=odoo
+      - PGPASSWORD=odoo
+    depends_on:
+      - db
+    command: python odoo.py --database=odoo --db_user=odoo --db_password=odoo
+
+  db:
+    image: postgres:9.4
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+
+volumes:
+  postgresql-data:

@@ -19,21 +19,45 @@ Getting started with Odoo
 For a standard installation please follow the <a href="https://www.odoo.com/documentation/9.0/setup/install.html">Setup instructions</a>
 from the documentation.
 
-If you are a developer you may type the following command at your terminal:
+### Quick Start with Docker & Docker Compose (Recommended)
+To run Odoo along with PostgreSQL in an isolated environment without manual dependency management:
 
-    wget -O- https://raw.githubusercontent.com/odoo/odoo/9.0/odoo.py | python
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+2. Start the services using Docker Compose:
+   ```bash
+   docker-compose up --build
+   ```
+3. Access the Odoo web interface at `http://localhost:8069`.
 
-Then follow <a href="https://www.odoo.com/documentation/9.0/tutorials.html">the developer tutorials</a>
+### Local Developer Setup
+If you are a developer running locally with Python 2.7 and PostgreSQL:
 
+1. Install system requirements (PostgreSQL, libxml2, libxslt, libldap):
+   ```bash
+   sudo apt-get install libpq-dev libxml2-dev libxslt1-dev libldap2-dev
+   ```
+2. Install Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Configure your environment variables (see `.env.example`).
+4. Run the development server:
+   ```bash
+   python odoo.py
+   ```
 
-For Odoo employees
-------------------
+### Running Tests
+Odoo includes a test suite that can be run against any database using the test runner:
+```bash
+python odoo.py -d test_db --test-enable --stop-after-init -i base,mass_mailing,lunch
+```
 
-To add the odoo-dev remote use this command:
-
-    $ ./odoo.py setup_git_dev
-
-To fetch odoo merge pull requests refs use this command:
-
-    $ ./odoo.py setup_git_review
+### Architecture Overview
+- **Core ORM (`openerp/models.py`)**: Object-Relational Mapping engine providing model definitions, fields, security rules, and inheritance.
+- **Addons (`addons/`)**: Modular business applications (CRM, Sales, Accounting, Inventory, Website, Mass Mailing, etc.) extending the core framework.
+- **View Engine**: QWeb-based rendering engine for dynamic views, forms, and web interfaces.
+- **Security & Access Control**: Granular Access Control Lists (`ir.model.access.csv`) and Record Rules enforced at the ORM layer.
 
