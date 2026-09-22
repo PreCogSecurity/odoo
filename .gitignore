@@ -2,9 +2,10 @@
 _build/
 
 # dotfiles
-.*
+!.[a-z]*
 !.gitignore
 !.mailmap
+!.github/
 # compiled python files
 *.py[co]
 # setup.py egg_info
